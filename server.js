@@ -10,24 +10,19 @@ const profile = require('./controllers/profile');
 const image = require('./controllers/image');
 
 // process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0; 
-  // client: 'pg',
-  // connection: {
-  //   connectionString: process.env.DATABASE_URL,
-  //   ssl: true,
-  // }  // client: 'pg',
-  // connection: {
-  //   connectionString: process.env.DATABASE_URL,
-  //   ssl: true,
-  // }
+// client: 'pg',
+// connection: {
+//   host : '127.0.0.1',
+//   user : '',
+//   password : '',
+//   database : 'smart-brain'
+// }
 
 const db = knex({
-
   client: 'pg',
   connection: {
-    host : '127.0.0.1',
-    user : '',
-    password : '',
-    database : 'smart-brain'
+    connectionString: process.env.DATABASE_URL,
+    ssl: true,
   }
 });
 
