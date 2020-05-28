@@ -25,8 +25,14 @@ const handleSignin = (db, bcrypt, req, res) => {
     .catch(err => Promise.reject('Wront credentials'))
 }
 
-const getAuthTokenId = () => {
-  console.log('Auth ok');
+const getAuthTokenId = (req, res) => {
+  const { authorization } = req.headers;
+  return redisClient.get(authorization, (err, reply) => {
+    if (err || !reply) {
+      return res.status(400).json('Unathorized')
+    }
+    return res.json({id: reply})
+  })
 }
 
 const signToken = (email) => {
@@ -44,14 +50,14 @@ const createSessions = (user) => {
   const token = signToken(email);
   return setToken(token, id)
     .then(() => {
-      return { success: true, userId: id, token }
+      return { success: 'true', userId: id, token }
       }) 
     .catch(console.log)
 }
 
 const signinAuthentication = (db, bcrypt) => (req, res) => {
   const { authorization } = req.headers;
-  return authorization ? getAuthTokenId() : handleSignin(db, bcrypt, req, res)
+  return authorization ? getAuthTokenId(req, res) : handleSignin(db, bcrypt, req, res)
   .then(data => {
     return data.id && data.email ? createSessions(data) : Promise.reject(data)
   })
@@ -60,5 +66,6 @@ const signinAuthentication = (db, bcrypt) => (req, res) => {
 }
 
 module.exports = {
-  signinAuthentication
+  signinAuthentication, 
+  redisClient: redisClient
 }
