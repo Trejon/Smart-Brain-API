@@ -34,7 +34,7 @@ app.use(bodyParser.json());
 app.use(morgan('combined'));
 
 app.get('/', (req, res) => {res.send('it is working!') })
-app.post('/signin', signin.handleSignin(db, bcrypt) )
+app.post('/signin', signin.signinAuthentication(db, bcrypt) )
 app.post('/signup', (req, res) => {signup.handleSignup(req, res, db, bcrypt) })
 app.get('/profile/:id', (req, res) => {profile.handleProfileGet(req, res, db) })
 app.post('/profile/:id', (req, res) => {profile.handleProfileUpdate(req, res, db)  })
